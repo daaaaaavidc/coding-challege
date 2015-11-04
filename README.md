@@ -24,7 +24,7 @@ Input lines are processed in batch, and processed lines are written to our outpu
 
 Again we take advantage of our JSON decoder, this time grabbing `timestamp_ms` and `hashtags`. We store our graph as a `Map`, the keys being edges (a `Set` of vertices) and the values being a `Long` timestamp.
 
-We could process/write in batch here again, but the instructions suggested we should be printing for each line, so that's what I did. The instructions did not mention stripping non-ASCII unicode characters from tweets in this step, so I didn't.
+We could process/write in batch here again, but the instructions suggested we should be printing for each line, so that's what I did.
 
 ### Testing
 
