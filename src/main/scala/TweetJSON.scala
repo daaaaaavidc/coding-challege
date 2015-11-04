@@ -44,13 +44,18 @@ case class TweetTags(ts: Long, hashtags: List[String])
 object TweetTags {
   implicit def hashtagCodec = casecodec1(Hashtag.apply, Hashtag.unapply)("text") 
 
+  def stripUnicode(hashtag: Hashtag): String = {
+    hashtag.text.replaceAll("[^\\u0000-\\u007F]", "").toLowerCase
+  }
+
   // Note: the instructions suggested getting `created_at`, but we're just going
   // to parse it to unix epoch, so we get `timestamp_ms` instead.
   implicit def tweetTagsDecoder: DecodeJson[TweetTags] = DecodeJson { c =>
     for {
       ts <- (c --\ "timestamp_ms").as[Long]
       hashtags <- (c --\ "entities" --\ "hashtags").as[List[Hashtag]]
-      hashtagText = hashtags.map(_.text.toLowerCase)
+      // We strip non-ASCII unicode again, and ignore empty hashtags.
+      hashtagText = hashtags.map(stripUnicode).filter(_ != "")
     } yield TweetTags(ts, hashtagText)
   }
 }
