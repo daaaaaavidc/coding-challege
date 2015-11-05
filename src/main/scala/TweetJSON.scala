@@ -23,7 +23,7 @@ object TweetText {
 
   private def tweetFrom(createdAt: String, rawText: String) = {
     // Remove non-ASCII unicode characters.
-    val asciiText = rawText.replaceAll("[^\\u0000-\\u007F]", "")
+    val asciiText = rawText.replaceAll("[^\\u0020-\\u007F]", "")
     val strippedUnicode = (asciiText.length < rawText.length)
 
     // Our JSON decoder will automatically handle escaped characters, which
@@ -45,7 +45,7 @@ object TweetTags {
   implicit def hashtagCodec = casecodec1(Hashtag.apply, Hashtag.unapply)("text") 
 
   def stripUnicode(hashtag: Hashtag): String = {
-    hashtag.text.replaceAll("[^\\u0000-\\u007F]", "").toLowerCase
+    hashtag.text.replaceAll("[^\\u0020-\\u007F]", "").toLowerCase
   }
 
   // Note: the instructions suggested getting `created_at`, but we're just going
